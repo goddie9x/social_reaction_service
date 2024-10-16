@@ -7,8 +7,7 @@ class ReactionService extends BasicService {
         super();
         bindMethodsWithThisContext(this);
     }
-    async getReactionOfTargetWithPagination(payloads) {
-        const { target, targetType, currentUser } = payloads;
+    async getReactionOfTargetWithPagination({ target, targetType, currentUser }) {
         //todo check user can view that first
         const reactionCountsPromise = Reaction.aggregate([
             {
@@ -42,9 +41,7 @@ class ReactionService extends BasicService {
             topReactions,
         };
     }
-    async getReactionByUser(payloads) {
-        const { id, targetType, page } = payloads;
-
+    async getReactionByUser({ id, targetType, page }) {
         const { results: reactions, totalDocuments, totalPages } = await this.getPaginatedResults({
             model: Reaction,
             query: {
@@ -59,8 +56,7 @@ class ReactionService extends BasicService {
             totalPages
         };
     }
-    async react(payloads) {
-        const { target, targetType, type, currentUser } = payloads;
+    async react({ target, targetType, type, currentUser }) {
         let reaction = await Reaction.findOne({
             target,
             targetType,
@@ -80,15 +76,12 @@ class ReactionService extends BasicService {
 
         return await reaction.save();
     }
-    async cancelReact(payloads) {
-        const { id } = payloads;
+    async cancelReact({ id }) {
         const reaction = await Reaction.findByIdAndDelete(id);
 
         return reaction;
     }
-    async deleteAllReactOfTarget(payloads) {
-        const { target, targetType } = payloads;
-
+    async deleteAllReactOfTarget({ target, targetType }) {
         const results = await Reaction.deleteMany({
             target,
             targetType

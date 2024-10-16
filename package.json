@@ -1,7 +1,22 @@
 {
   "dependencies": {
     "dotenv": "^16.4.5",
+    "eureka-js-client": "^4.5.0",
     "express": "^4.21.1",
-    "mongoose": "^8.7.1"
-  }
+    "mongoose": "^8.7.1",
+    "reaction_service": "file:"
+  },
+  "name": "reaction_service",
+  "version": "1.0.0",
+  "description": "reaction service for social media",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "reaction"
+  ],
+  "author": "goddie9x",
+  "license": "MIT"
 }
