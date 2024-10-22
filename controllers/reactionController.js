@@ -10,7 +10,8 @@ class ReactionController extends BasicController {
     async getReactionOfTargetWithPagination(req, res) {
         try {
             const reactionsInfo = await reactionService.getReactionOfTargetWithPagination({ ...req.query, ...req.body });
-            res.status(201).json(reactionsInfo);
+            
+            return res.status(201).json(reactionsInfo);
         } catch (error) {
             return this.handleResponseError(res, error);
         }
@@ -18,7 +19,7 @@ class ReactionController extends BasicController {
 
     async getReactionOfCurrentUser(req, res) {
         try {
-            const payload = { id: req.body.currentUser.userId, targetType: req.body.targetType, page: req.body.page }
+            const payload = { id: req.body.currentUser.userId, ...req.query }
             const reactionsInfo = await reactionService.getReactionByUser(payload);
 
             res.status(201).json(reactionsInfo);
@@ -38,14 +39,14 @@ class ReactionController extends BasicController {
         try {
             const reaction = await reactionService.cancelReact({ id: req.params.id });
 
-            res.status(201).json(reaction);
+            res.status(203).json(reaction);
         } catch (error) {
             return this.handleResponseError(res, error);
         }
     }
     async deleteAllReactOfTarget(req, res) {
         try {
-            const reaction = await reactionService.deleteAllReactOfTarget(req.body);
+            const reaction = await reactionService.deleteAllReactOfTarget({ ...req.params, ...req.body });
 
             res.status(201).json(reaction);
         } catch (error) {

@@ -1,6 +1,11 @@
 const BasicService = require('../utils/services/basicService');
 const bindMethodsWithThisContext = require('../utils/classes/bindMethodsWithThisContext');
 const Reaction = require('../models/reaction');
+const { BadRequestException } = require('../utils/exceptions/commonExceptions');
+const { TARGET_TYPE, TYPE } = require('../utils/constants/reaction');
+
+const TARGET_TYPE_ARRAY = Object.values(TARGET_TYPE);
+const TYPE_ARRAY = Object.values(TYPE);
 
 class ReactionService extends BasicService {
     constructor() {
@@ -18,7 +23,7 @@ class ReactionService extends BasicService {
             },
         ]);
         const topReactionsPromise = Reaction.aggregate([
-            { $match: { target, targetType } },
+            { $match: { target, targetType: Number(targetType) } },
             { $sort: { createdAt: -1 } },
             { $limit: 10 },
             {
@@ -35,7 +40,6 @@ class ReactionService extends BasicService {
             }
         ]);
         const [reactionCounts, topReactions] = await Promise.all([reactionCountsPromise, topReactionsPromise]);
-
         return {
             reactionCounts,
             topReactions,
@@ -57,17 +61,17 @@ class ReactionService extends BasicService {
         };
     }
     async react({ target, targetType, type, currentUser }) {
-        let reaction = await Reaction.findOne({
+        if (!target || !TARGET_TYPE_ARRAY.includes(targetType) || !TYPE_ARRAY.includes(type)) {
+            throw new BadRequestException('You must provide both target, target type and type of reaction')
+        }
+        await Reaction.findOneAndDelete({
             target,
             targetType,
             user: currentUser.userId,
         });
 
-        if (reaction) {
-            await reaction.delete();
-        }
         //push notification to the target owner so that you must query the target first
-        reaction = new Reaction({
+        const reaction = new Reaction({
             target,
             targetType,
             type,
@@ -81,7 +85,10 @@ class ReactionService extends BasicService {
 
         return reaction;
     }
-    async deleteAllReactOfTarget({ target, targetType }) {
+    async deleteAllReactOfTarget({ target, targetType, currentUser }) {
+        if (!target || !TARGET_TYPE_ARRAY.includes(targetType)) {
+            throw new BadRequestException('You must provide both target and target type')
+        }
         const results = await Reaction.deleteMany({
             target,
             targetType
