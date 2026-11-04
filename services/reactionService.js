@@ -15,6 +15,7 @@ class ReactionService extends BasicService {
     async getReactionOfTargetWithPagination({ target, targetType, currentUser }) {
         //todo check user can view that first
         const reactionCountsPromise = Reaction.aggregate([
+            { $match: { target, targetType: Number(targetType) } },
             {
                 $group: {
                     _id: '$type',
