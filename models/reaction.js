@@ -1,5 +1,5 @@
 const mongoose = require('../configs/mongo');
-const REACTION = require('../utils/constants/reaction');
+const REACTION = require('@godsocial/utils/constants/reaction');
 
 const REACTION_TYPE_ARRAY = Object.values(REACTION.TYPE);
 const REACTION_TARGET_TYPE_ARRAY = Object.values(REACTION.TARGET_TYPE);

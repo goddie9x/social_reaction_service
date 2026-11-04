@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const reactionController = require('../controllers/reactionController');
-const mapHealthStatusRoute = require('../utils/eureka/healthStatusRoute');
+const mapHealthStatusRoute = require('@godsocial/utils/eureka/healthStatusRoute');
 
 mapHealthStatusRoute(router);
 router.get('/of-current-user',reactionController.getReactionOfCurrentUser);

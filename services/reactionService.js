@@ -1,8 +1,8 @@
-const BasicService = require('../utils/services/basicService');
-const bindMethodsWithThisContext = require('../utils/classes/bindMethodsWithThisContext');
+const BasicService = require('@godsocial/utils/services/basicService');
+const bindMethodsWithThisContext = require('@godsocial/utils/classes/bindMethodsWithThisContext');
 const Reaction = require('../models/reaction');
-const { BadRequestException } = require('../utils/exceptions/commonExceptions');
-const { TARGET_TYPE, TYPE } = require('../utils/constants/reaction');
+const { BadRequestException } = require('@godsocial/utils/exceptions/commonExceptions');
+const { TARGET_TYPE, TYPE } = require('@godsocial/utils/constants/reaction');
 
 const TARGET_TYPE_ARRAY = Object.values(TARGET_TYPE);
 const TYPE_ARRAY = Object.values(TYPE);
